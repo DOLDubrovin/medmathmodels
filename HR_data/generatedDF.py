@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import os
 os.makedirs("output/plots",exist_ok=True)
 # %%
-def generate(n=200):   #//number of observations
+def generate(n,a):   #//number of observations n=50 .. 5000, a= 0.6 ..1 (nominal 0.8)
     Age=np.clip(np.random.normal(50,10,n),18,90).astype(int)#//weparate, becouse of use in Functions
     Sex=np.random.choice(["M","F"],n)
     EF=70-Age*0.4+np.random.normal(0,5,n)#//Vermutung: correlation with age, sd 5
@@ -26,7 +26,7 @@ def generate(n=200):   #//number of observations
     categories=["no HF", "HFpEF", "HFmrEF", "HFrEF"],
     ordered=True
     )
-    HR=100-EF*0.8+np.random.normal(0,5,n) # HF empirisch
+    HR=75+(60-EF)*a+np.random.normal(0,5,n) # HF empirisch
     df1 = pd.DataFrame({
 "ObservID":range(1, n+1),#//n+1 besouse the py built to n-1
 "Age":Age,
@@ -38,6 +38,6 @@ def generate(n=200):   #//number of observations
 })
 
     return df1
-df1=generate()
-print(df1)
-df1.to_csv("output/df1.csv", index=False)
+# df1=generate()
+# print(df1)
+
