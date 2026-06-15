@@ -2,12 +2,10 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from generatedDF import generate
 st.title("Interactive HR Data Generator")
-st.dataframe(df1.head(20))
-st.download_button(...)
-st.pyplot(...)
 n=st.slider("Number",50,5000,200)
 a=st.slider("strength of the influence of the EF on the HR", 0.6, 1.0,0.01)
 df1=generate(n,a)
+st.dataframe(df1.head(20))
 st.dataframe(df1) # ?
 st.write("Correlation EF-HR:", df1["EF"].corr(df1["HR"])) # ?
 # print(df1)
