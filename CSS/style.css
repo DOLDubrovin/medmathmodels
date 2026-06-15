@@ -27,3 +27,7 @@ footer {
   background: #1e293b;
   color: #cbd5e1;
 }
+.plot-image {
+    max-width: 80%;
+    height: auto;
+}
