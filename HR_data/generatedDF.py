@@ -12,10 +12,16 @@ import matplotlib.pyplot as plt
 import os
 os.makedirs("output/plots",exist_ok=True)
 # %%
-def generate(n,a):   #//number of observations n=50 .. 5000, a= 0.6 ..1 (nominal 0.8)
-    Age=np.clip(np.random.normal(50,10,n),18,90).astype(int)#//weparate, becouse of use in Functions
+def generate(n,a,b,c,d,e,f):   #//number of observations n=50 .. 5000, korrelation strangth with EF
+    # a= 0.6 ..1 (nominal 0.8), 
+    # b korrelation with Hb
+    #c korrelation wich SV (stroke volume)
+    #d korr wich BMI
+    #e korrelation with BB
+    #f korellation with Rhthmus
+    Age=np.clip(np.random.normal(50,10,n),18,90).astype(int)#//generate age of n patients from 18 to 90 years, normal distribution
     Sex=np.random.choice(["M","F"],n)
-    EF=70-Age*0.4+np.random.normal(0,5,n)#//Vermutung: correlation with age, sd 5
+    EF=70-Age*0.4+np.random.normal(0,5,n)#//correlation with age, empiric, with noise
     NYHA_score=(5-EF/15+np.random.normal(0,0.5,n))
     NYHA=np.clip(np.round(NYHA_score),1,4).astype(int)
     HF=np.where((EF>55)&(NYHA==1), "no HF",
@@ -26,7 +32,13 @@ def generate(n,a):   #//number of observations n=50 .. 5000, a= 0.6 ..1 (nominal
     categories=["no HF", "HFpEF", "HFmrEF", "HFrEF"],
     ordered=True
     )
-    HR=75+(60-EF)*a+np.random.normal(0,5,n) # HF empirisch
+    Hb=np.random.normal(7,0.6,n)
+    EDV= np.random.normal (120, 20, n) # end diastolic volume
+    SV=EDV*EF/100
+    BMI=np.random.normal(22,1.5,n) 
+    BB=np.random.choice(["mit BB", "ohne BB"],n)
+    Rhythm=np.random.choice(["SR", "AF"], n)
+    HR=75+(60-EF)*a+(70-EF)*c+d*(BMI-22)+(b*(7-Hb))-e*(np.where(BB=="mit BB",5,0).astype(float))+f*(np.where(Rhythm=="AF",10,0).astype(float))+np.random.normal(0,5,n) # HF empirisch, depending from EF, SV, Hb,
     df1 = pd.DataFrame({
 "ObservID":range(1, n+1),#//n+1 besouse the py built to n-1
 "Age":Age,
@@ -34,7 +46,12 @@ def generate(n,a):   #//number of observations n=50 .. 5000, a= 0.6 ..1 (nominal
 "EF":EF,
 "NYHA":NYHA,
 "HF":HF,
-"HR":HR
+"Hb":Hb,
+"HR":HR,
+"SV":SV,
+"BMI":BMI,
+"BB":BB,
+"Rhythm":Rhythm
 })
 
     return df1
