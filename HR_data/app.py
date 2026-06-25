@@ -2,6 +2,17 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from generatedDF import generate
 st.title("Interactive HR Data Generator")
+st.write(
+    """
+    This simulator generates synthetic patient datasets based on an assumed relationship 
+    between heart rate and clinical variables. We hypothesize that heart rate can be 
+    described by a multivariable regression model, 
+    **HR = β₀ + β₁X₁ + β₂X₂ + ⋯ + βₙXₙ + ε**, 
+    whose coefficients can be estimated and validated in future clinical studies. 
+    The current implementation is intended for education, hypothesis generation, 
+    and methodological development.
+    """
+)
 n=st.slider("Number",50,5000,200)
 a=st.slider("strength of the influence of the EF on the HR", 0.1, 0.5, 0.3, 0.1)#mi,max, startvalue,schritt
 b=st.slider("strength of the influence of the Hb on the HR", 2.5, 10.0, 5.0, 0.1)
